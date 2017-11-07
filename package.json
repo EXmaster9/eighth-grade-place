@@ -1,0 +1,9 @@
+{
+  "name": "eight-grade-place",
+  "version": "0.0.1",
+  "description": "r/place but for 8th grade",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}
