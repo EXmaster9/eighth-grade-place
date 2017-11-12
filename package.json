@@ -4,6 +4,7 @@
   "description": "r/place but for 8th grade",
   "dependencies": {
     "express": "^4.16.2",
+    "filter-object": "^3.0.0",
     "socket.io": "^2.0.4"
   }
 }
