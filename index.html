@@ -1,52 +1,114 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<link rel="icon" href="favicon.ico" type="image/icon">
-  	<title>8th Grade Place</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="icon" href="favicon.png" type="image/png">
+	<link href="https://fonts.googleapis.com/css?family=Arvo:700" rel="stylesheet">
+  	<title>Warfare Station</title>
     <style>
+		  h1 {
+				font-family: 'Arvo', serif;
+				text-align: center;
+			}
     	.grid { margin:1em auto; border-collapse:collapse }
       .grid td {
     		cursor:pointer;
     		width:10px; height:10px;
     		border:1px solid #ccc;
     		text-align:center;
-    		font-family:sans-serif; font-size:13px
+    		font-family: 'Arvo', serif; font-size:13px;
       }
-			.grid td.clicked {
-    		background-color:black;
-    		font-weight:bold; color:red;
+			.grid td.blue {
+    		background-color:#004aba;
+    		font-weight:bold; color:black;
+			}
+			.grid td.red {
+    		background-color:#f20924;
+    		font-weight:bold; color:black;
+			}
+			.grid td.green {
+    		background-color:#23a330;
+    		font-weight:bold; color:black;
+			}
+			.grid td.gray {
+    		background-color:#878787;
+    		font-weight:bold; color:black;
+			}
+			.grid td.purple {
+    		background-color:#77128c;
+    		font-weight:bold; color:black;
+			}
+			.grid td.pink {
+    		background-color:#ff4cea;
+    		font-weight:bold; color:black;
 			}
     </style>
 	</head>
 	<body>
-  	<h1>8th Grade Place</h1>
+  	<h1>Warfare Station</h1>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 	<script>
 	const socket=io();
-    	var clicked = [];
-		function clicko(el,row,col,i){
-		var elm = document.getElementById(i);
-      console.log("You clicked on element:",el);
-    	console.log("You clicked on row:",row);
-    	console.log("You clicked on col:",col);
-    	console.log("You clicked on item #:",i);
-    	elm.className='clicked';
-    	if (clicked.includes(row + " " + col)) {var ind = clicked.indexOf(row + " " + col); elm.className=''; clicked.splice(ind,1);}else{
-      var nC = row + " " + col;
-    	clicked.push(nC);}
+	var uuid = getCookie('wfsuuid');
+	function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
-socket.on('clickot',function(data){
-	clicko(data.e,data.r,data.c,data.ind);
-	console.log("received clickot");
+socket.on('connecto',function(data){
+	data.co[0].forEach(inde => (document.getElementById(inde).className = "blue"))
+	data.co[1].forEach(inde => (document.getElementById(inde).className = "red"))
+	data.co[2].forEach(inde => (document.getElementById(inde).className = "green"))
+	data.co[3].forEach(inde => (document.getElementById(inde).className = "gray"))
+	data.co[4].forEach(inde => (document.getElementById(inde).className = "purple"))
+	data.co[5].forEach(inde => (document.getElementById(inde).className = "pink"))
 });
-
-			var grid = clickableGrid(50,100,function(el,row,col,i) {
-			socket.emit('clicko',{e:el,r:row,c:col,ind:i});
+socket.on('clicka',function(data){
+	var elm = document.getElementById(data.ind);
+	elm.innerHTML=data.am;
+});
+socket.on('clickc',function(data){
+	var elm = document.getElementById(data.ind);
+	switch (data.co) {
+		case 0:
+		  elm.className = "blue";
+		  break;
+		case 1:
+			elm.className = "red";
+			break;
+		case 2:
+			elm.className = "green";
+			break;
+		case 3:
+			elm.className = "gray";
+			break;
+		case 4:
+			elm.className = "purple";
+			break;
+		case 5:
+			elm.className = "pink";
+			break;
+					  elm.className = "blue";
+					  break;
+	}
+});
+			var grid = clickableGrid(200,100,function(el,row,col,i) {
+			socket.emit('clicko', {i: i, uuid: uuid});
 		});
 
 document.body.appendChild(grid);
-     
+
 function clickableGrid( rows, cols, callback ){
     var i=0;
     var grid = document.createElement('table');
