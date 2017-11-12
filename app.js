@@ -58,10 +58,16 @@ io.on('connection', function (socket) {
     console.log(pc)
     if (pc !== user.clan && pc !== 6) {
       clixIndex = forEachIndex(clix, data.i)
-      clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
-      clix[clixIndex - 1].push(data.i)
-      clixIndex = forEachIndex(clix, data.i)
-      io.emit('clicka', {ind: data.i, am: clixIndex})
+      if (clixIndex === 0) {
+        clix[0].splice(clix[0].indexOf(data.i), 1)
+        colors[forEachIndex(colors, data.i)].splice(colors[forEachIndex(colors, data.i)].indexOf(data.i), 1)
+        io.emit('clickc', {ind: data.i, co: 6})
+      } else {
+        clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
+        clix[clixIndex - 1].push(data.i)
+        clixIndex = forEachIndex(clix, data.i)
+        io.emit('clicka', {ind: data.i, am: clixIndex})
+      }
     }
     if (pc === user.clan) {
       clixIndex = forEachIndex(clix, data.i)
