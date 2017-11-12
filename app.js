@@ -20,11 +20,17 @@ app.get('/favicon.png', function (req, res) {
 function forEachIndex (arr, ind) {
   for (var i = 0; i < arr.length; ++i) { if (arr[i].includes(ind) === true) { return i } }
 }
+<<<<<<< HEAD
 /*
 function wFile (p, file) {
   fs.writeFileSync(file, JSON.stringify(p, null, 2), 'utf8', { if (err) { return console.log(err) } })
 }
 */
+=======
+function wFile (p, file) {
+  fs.writeFileSync(file, JSON.stringify(p, null, 2), 'utf8', { if (err) { return console.log(err) } })
+}
+>>>>>>> 0da1770a7fe7cd972a53c2ef7dec333560a538a4
 io.on('connection', function (socket) {
   console.log('CLIENT CONNECTED WITH IP: ' + socket.request.connection.remoteAddress.split(':').splice(0, 1)[0])
   io.emit('connecto', {cl: clix, co: colors})
@@ -77,9 +83,13 @@ io.on('connection', function (socket) {
     }
   })
 })
+<<<<<<< HEAD
 process.on('SIGINT', function () {
 
 })
+=======
+
+>>>>>>> 0da1770a7fe7cd972a53c2ef7dec333560a538a4
 http.listen(port, function () {
   console.log('SERVER LISTENING ON PORT ' + port)
 })
