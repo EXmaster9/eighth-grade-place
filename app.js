@@ -20,14 +20,15 @@ app.get('/favicon.png', function (req, res) {
 function forEachIndex (arr, ind) {
   for (var i = 0; i < arr.length; ++i) { if (arr[i].includes(ind) === true) { return i } }
 }
-/*
 function wFile (p, file) {
   fs.writeFileSync(file, JSON.stringify(p, null, 2), 'utf8', { if (err) { return console.log(err) } })
 }
-*/
 io.on('connection', function (socket) {
   console.log('CLIENT CONNECTED WITH IP: ' + socket.request.connection.remoteAddress.split(':').splice(0, 1)[0])
   io.emit('connecto', {cl: clix, co: colors})
+  socket.on('shutdown', function () {
+    wFile(clix, clix.json); wFile(colors, colors.json)
+  })
   socket.on('clicko', function (data) {
     var nuuid = 'n' + data.uuid
     var user = users[nuuid]
@@ -82,6 +83,9 @@ io.on('connection', function (socket) {
     }
   })
 })
+setInterval(function () {
+  wFile(clix, clix.json); wFile(colors, colors.json)
+}, 60000)
 http.listen(port, function () {
   console.log('SERVER LISTENING ON PORT ' + port)
 })

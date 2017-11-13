@@ -1,20 +1,14 @@
 {
-  "n173": {
-    "uuid": 173,
-    "name": "Eli",
-    "clan": 0,
-    "leader": true
+  "blue": {
+    "clan": 0
   },
-  "n113": {
-    "uuid": 113,
-    "name": "Jude",
-    "clan": 1,
-    "leader": true
+  "red": {
+    "clan": 1
   },
-  "n504": {
-    "uuid": 504,
-    "name": "Malachi",
-    "clan": 2,
-    "leader": true
+  "green": {
+    "clan": 2
+  },
+  "gray": {
+    "clan": 3
   }
 }
