@@ -16,6 +16,7 @@
     		width:10px; height:10px;
     		border:1px solid #ccc;
     		text-align:center;
+				color: white;
     		font-family: 'Arvo', serif; font-size:13px;
       }
 			.grid td.blue {
@@ -51,6 +52,7 @@
 	<script>
 	const socket=io();
 	var uuid = getCookie('wfsuuid');
+	var ari;
 	function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -73,6 +75,11 @@ socket.on('connecto',function(data){
 	data.co[3].forEach(inde => (document.getElementById(inde).className = "gray"))
 	data.co[4].forEach(inde => (document.getElementById(inde).className = "purple"))
 	data.co[5].forEach(inde => (document.getElementById(inde).className = "pink"))
+  for (var i=0; i < data.cl.length; ++i) {
+		for (var po=0; po < data.cl[i].length; ++po) {
+			document.getElementById(data.cl[i][po]).innerHTML = i;
+		}
+	}
 });
 socket.on('clicka',function(data){
 	var elm = document.getElementById(data.ind);
@@ -80,6 +87,7 @@ socket.on('clicka',function(data){
 });
 socket.on('clickc',function(data){
 	var elm = document.getElementById(data.ind);
+	elm.innerHTML = 1;
 	switch (data.co) {
 		case 0:
 		  elm.className = "blue";
@@ -99,8 +107,9 @@ socket.on('clickc',function(data){
 		case 5:
 			elm.className = "pink";
 			break;
-					  elm.className = "blue";
-					  break;
+		case 6:
+			elm.className = "";
+			break;
 	}
 });
 			var grid = clickableGrid(200,100,function(el,row,col,i) {

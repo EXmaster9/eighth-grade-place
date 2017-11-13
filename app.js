@@ -55,7 +55,6 @@ io.on('connection', function (socket) {
       default:
         pc = 6
     }
-    console.log(pc)
     if (pc !== user.clan && pc !== 6) {
       clixIndex = forEachIndex(clix, data.i)
       if (clixIndex === 0) {
