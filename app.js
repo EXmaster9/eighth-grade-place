@@ -27,7 +27,9 @@ io.on('connection', function (socket) {
   console.log('CLIENT CONNECTED WITH IP: ' + socket.request.connection.remoteAddress.split(':').splice(0, 1)[0])
   io.emit('connecto', {cl: clix, co: colors})
   socket.on('shutdown', function () {
-    wFile(clix, clix.json); wFile(colors, colors.json)
+    wFile(clix, clix.json)
+    wFile(colors, colors.json)
+    process.exit()
   })
   socket.on('clicko', function (data) {
     var nuuid = 'n' + data.uuid
