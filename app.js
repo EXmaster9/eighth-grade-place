@@ -20,9 +20,11 @@ app.get('/favicon.png', function (req, res) {
 function forEachIndex (arr, ind) {
   for (var i = 0; i < arr.length; ++i) { if (arr[i].includes(ind) === true) { return i } }
 }
+/*
 function wFile (p, file) {
   fs.writeFileSync(file, JSON.stringify(p, null, 2), 'utf8', { if (err) { return console.log(err) } })
 }
+*/
 io.on('connection', function (socket) {
   console.log('CLIENT CONNECTED WITH IP: ' + socket.request.connection.remoteAddress.split(':').splice(0, 1)[0])
   io.emit('connecto', {cl: clix, co: colors})
@@ -53,13 +55,18 @@ io.on('connection', function (socket) {
       default:
         pc = 6
     }
-    console.log(pc)
     if (pc !== user.clan && pc !== 6) {
       clixIndex = forEachIndex(clix, data.i)
-      clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
-      clix[clixIndex - 1].push(data.i)
-      clixIndex = forEachIndex(clix, data.i)
-      io.emit('clicka', {ind: data.i, am: clixIndex})
+      if (clixIndex === 0) {
+        clix[0].splice(clix[0].indexOf(data.i), 1)
+        colors[forEachIndex(colors, data.i)].splice(colors[forEachIndex(colors, data.i)].indexOf(data.i), 1)
+        io.emit('clickc', {ind: data.i, co: 6})
+      } else {
+        clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
+        clix[clixIndex - 1].push(data.i)
+        clixIndex = forEachIndex(clix, data.i)
+        io.emit('clicka', {ind: data.i, am: clixIndex})
+      }
     }
     if (pc === user.clan) {
       clixIndex = forEachIndex(clix, data.i)
@@ -75,7 +82,6 @@ io.on('connection', function (socket) {
     }
   })
 })
-
 http.listen(port, function () {
   console.log('SERVER LISTENING ON PORT ' + port)
 })
