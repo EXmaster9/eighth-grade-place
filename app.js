@@ -5,7 +5,6 @@ var fs = require('fs')
 var path = require('path')
 var colors = JSON.parse(fs.readFileSync('colors.json'))
 var clix = JSON.parse(fs.readFileSync('clix.json'))
-var users = JSON.parse(fs.readFileSync('users.json'))
 var port = process.env.PORT || 80
 
 app.get('/', function (req, res) {
@@ -32,8 +31,6 @@ io.on('connection', function (socket) {
     process.exit()
   })
   socket.on('clicko', function (data) {
-    var nuuid = 'n' + data.uuid
-    var user = users[nuuid]
     var pc
     var clixIndex
     switch (forEachIndex(colors, data.i)) {
@@ -58,7 +55,7 @@ io.on('connection', function (socket) {
       default:
         pc = 6
     }
-    if (pc !== user.clan && pc !== 6) {
+    if (pc !== data.uc && pc !== 6) {
       clixIndex = forEachIndex(clix, data.i)
       if (clixIndex === 0) {
         clix[0].splice(clix[0].indexOf(data.i), 1)
@@ -71,7 +68,7 @@ io.on('connection', function (socket) {
         io.emit('clicka', {ind: data.i, am: clixIndex})
       }
     }
-    if (pc === user.clan) {
+    if (pc === data.uc) {
       clixIndex = forEachIndex(clix, data.i)
       clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
       clix[clixIndex + 1].push(data.i)
@@ -79,9 +76,9 @@ io.on('connection', function (socket) {
       io.emit('clicka', {ind: data.i, am: clixIndex})
     }
     if (pc === 6) {
-      colors[user.clan].push(data.i)
+      colors[data.uc].push(data.i)
       clix[1].push(data.i)
-      io.emit('clickc', {ind: data.i, co: user.clan})
+      io.emit('clickc', {ind: data.i, co: data.uc})
     }
   })
 })
