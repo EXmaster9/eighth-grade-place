@@ -113,7 +113,7 @@ socket.on('clickc',function(data){
 	}
 });
 			var grid = clickableGrid(200,100,function(el,row,col,i) {
-			socket.emit('clicko', {i: i, uuid: uuid});
+			socket.emit('clicko', {i: i, uc: uuid});
 		});
 
 document.body.appendChild(grid);
