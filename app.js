@@ -23,7 +23,7 @@ function wFile (p, file) {
   fs.writeFileSync(file, JSON.stringify(p, null, 2), 'utf8', { if (err) { return console.log(err) } })
 }
 io.on('connection', function (socket) {
-  console.log('CLIENT CONNECTED WITH IP: ' + socket.request.connection.remoteAddress.split(':').splice(0, 1)[0])
+  console.log('CLIENT CONNECTED WITH IP: ' + socket.request.connection.remoteAddress.split(':').slice(3)[0])
   io.emit('connecto', {cl: clix, co: colors})
   socket.on('shutdown', function () {
     wFile(clix, clix.json)
@@ -31,8 +31,13 @@ io.on('connection', function (socket) {
     process.exit()
   })
   socket.on('clicko', function (data) {
+    if (data.uc === '') {
+      data.uc = 0
+    }
     var pc
     var clixIndex
+    var pan = []
+    colors.forEach(ting => (ting.forEach(tinga => (pan.push(tinga)))))
     switch (forEachIndex(colors, data.i)) {
       case 0:
         pc = 0
@@ -57,7 +62,7 @@ io.on('connection', function (socket) {
     }
     if (pc !== data.uc && pc !== 6) {
       clixIndex = forEachIndex(clix, data.i)
-      if (clixIndex === 0) {
+      if (clixIndex === 1) {
         clix[0].splice(clix[0].indexOf(data.i), 1)
         colors[forEachIndex(colors, data.i)].splice(colors[forEachIndex(colors, data.i)].indexOf(data.i), 1)
         io.emit('clickc', {ind: data.i, co: 6})
@@ -76,9 +81,11 @@ io.on('connection', function (socket) {
       io.emit('clicka', {ind: data.i, am: clixIndex})
     }
     if (pc === 6) {
-      colors[data.uc].push(data.i)
-      clix[1].push(data.i)
-      io.emit('clickc', {ind: data.i, co: data.uc})
+      if ((pan.contains(data.i + 100) && forEachIndex(colors, data.i + 100) === data.uc) || (pan.contains(data.i - 100) && forEachIndex(colors, data.i - 100) === data.uc) || (pan.contains(data.i + 1) && forEachIndex(colors, data.i + 1) === data.uc) || (pan.contains(data.i - 1) && forEachIndex(colors, data.i - 1) === data.uc)) {
+        colors[data.uc].push(data.i)
+        clix[1].push(data.i)
+        io.emit('clickc', {ind: data.i, co: data.uc})
+      }
     }
   })
 })
