@@ -2,19 +2,18 @@ var app = require('express')()
 var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var fs = require('fs')
-var path = require('path')
 var colors = JSON.parse(fs.readFileSync('colors.json'))
 var clix = JSON.parse(fs.readFileSync('clix.json'))
 var port = process.env.PORT || 80
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '/index.html'))
+  res.sendFile('C:/Users/Eli/Desktop/warfare-station/index.html')
 })
 app.get('/favicon.ico', function (req, res) {
-  res.sendFile(path.join(__dirname, '/favicon.ico'))
+  res.sendFile('C:/Users/Eli/Desktop/warfare-station/favicon.ico')
 })
 app.get('/favicon.png', function (req, res) {
-  res.sendFile(path.join(__dirname, '/favicon.png'))
+  res.sendFile('C:/Users/Eli/Desktop/warfare-station/favicon.png')
 })
 function forEachIndex (arr, ind) {
   for (var i = 0; i < arr.length; ++i) { if (arr[i].includes(ind) === true) { return i } }
@@ -31,13 +30,14 @@ io.on('connection', function (socket) {
     process.exit()
   })
   socket.on('clicko', function (data) {
-    if (data.uc === '') {
-      data.uc = 0
+    var userco
+    if (data.uc == null) {
+      userco = 0 // Math.round(Math.random() * (5 - 0) + 0)
+    } else {
+      userco = data.uc
     }
     var pc
     var clixIndex
-    var pan = []
-    colors.forEach(ting => (ting.forEach(tinga => (pan.push(tinga)))))
     switch (forEachIndex(colors, data.i)) {
       case 0:
         pc = 0
@@ -60,37 +60,47 @@ io.on('connection', function (socket) {
       default:
         pc = 6
     }
-    if (pc !== data.uc && pc !== 6) {
-      clixIndex = forEachIndex(clix, data.i)
-      if (clixIndex === 1) {
-        clix[0].splice(clix[0].indexOf(data.i), 1)
-        colors[forEachIndex(colors, data.i)].splice(colors[forEachIndex(colors, data.i)].indexOf(data.i), 1)
-        io.emit('clickc', {ind: data.i, co: 6})
-      } else {
+    if (pc !== userco && pc !== 6) {
+      try {
+        if (colors[userco].includes(data.i + 100) || colors[userco].includes(data.i - 100) || colors[userco].includes(data.i + 1) || colors[userco].includes(data.i - 1)) {
+          clixIndex = forEachIndex(clix, data.i)
+          if (clixIndex === 1) {
+            clix[0].splice(clix[0].indexOf(data.i), 1)
+            colors[forEachIndex(colors, data.i)].splice(colors[forEachIndex(colors, data.i)].indexOf(data.i), 1)
+            io.emit('clickc', {ind: data.i, co: 6})
+          } else {
+            clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
+            clix[clixIndex - 1].push(data.i)
+            clixIndex = forEachIndex(clix, data.i)
+            io.emit('clicka', {ind: data.i, am: clixIndex})
+          }
+        }
+      } catch (err) {}
+    }
+    if (pc === userco) {
+      try {
+        clixIndex = forEachIndex(clix, data.i)
+        if (clixIndex === undefined) { clixIndex = 998 }
         clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
-        clix[clixIndex - 1].push(data.i)
+        clix[clixIndex + 1].push(data.i)
         clixIndex = forEachIndex(clix, data.i)
         io.emit('clicka', {ind: data.i, am: clixIndex})
-      }
-    }
-    if (pc === data.uc) {
-      clixIndex = forEachIndex(clix, data.i)
-      clix[clixIndex].splice(clix[clixIndex].indexOf(data.i), 1)
-      clix[clixIndex + 1].push(data.i)
-      clixIndex = forEachIndex(clix, data.i)
-      io.emit('clicka', {ind: data.i, am: clixIndex})
+      } catch (err) {}
     }
     if (pc === 6) {
-      if ((pan.contains(data.i + 100) && forEachIndex(colors, data.i + 100) === data.uc) || (pan.contains(data.i - 100) && forEachIndex(colors, data.i - 100) === data.uc) || (pan.contains(data.i + 1) && forEachIndex(colors, data.i + 1) === data.uc) || (pan.contains(data.i - 1) && forEachIndex(colors, data.i - 1) === data.uc)) {
-        colors[data.uc].push(data.i)
-        clix[1].push(data.i)
-        io.emit('clickc', {ind: data.i, co: data.uc})
-      }
+      try {
+        if (colors[userco].includes(data.i + 100) || colors[userco].includes(data.i - 100) || colors[userco].includes(data.i + 1) || colors[userco].includes(data.i - 1)) {
+          colors[userco].push(data.i)
+          clix[1].push(data.i)
+          io.emit('clickc', {ind: data.i, co: userco})
+        }
+      } catch (err) {}
     }
   })
 })
 setInterval(function () {
-  wFile(clix, clix.json); wFile(colors, colors.json)
+  wFile(clix, 'clix.json'); wFile(colors, 'colors.json')
+  console.log('WORLD FILES SAVED AT ' + Date().toUpperCase())
 }, 60000)
 http.listen(port, function () {
   console.log('SERVER LISTENING ON PORT ' + port)
