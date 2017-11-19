@@ -7,13 +7,13 @@ var clix = JSON.parse(fs.readFileSync('clix.json'))
 var port = process.env.PORT || 80
 
 app.get('/', function (req, res) {
-  res.sendFile('index.html')
+  res.sendFile('/app/index.html')
 })
 app.get('/favicon.ico', function (req, res) {
-  res.sendFile('favicon.ico')
+  res.sendFile('/app/favicon.ico')
 })
 app.get('/favicon.png', function (req, res) {
-  res.sendFile('favicon.png')
+  res.sendFile('/app/favicon.png')
 })
 function forEachIndex (arr, ind) {
   for (var i = 0; i < arr.length; ++i) { if (arr[i].includes(ind) === true) { return i } }
