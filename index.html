@@ -48,7 +48,6 @@
 	<body>
   	<h1>Warfare Station</h1>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 	<script>
 	const socket=io();
 	var uuid = getCookie('wfsuuid');
@@ -117,6 +116,34 @@ socket.on('clickc',function(data){
 		});
 
 document.body.appendChild(grid);
+document.addEventListener('keydown', function(event) {
+switch (event.keyCode) {
+	case 49:
+		uuid = 0;
+		document.cookie = "wfsuuid=0; expires=Thu, 18 Dec 2030 12:00:00 UTC";
+		break;
+	case 50:
+		uuid = 1;
+		document.cookie = "wfsuuid=1; expires=Thu, 18 Dec 2030 12:00:00 UTC";
+		break;
+	case 51:
+		uuid = 2;
+		document.cookie = "wfsuuid=2; expires=Thu, 18 Dec 2030 12:00:00 UTC";
+		break;
+	case 52:
+		uuid = 3;
+		document.cookie = "wfsuuid=3; expires=Thu, 18 Dec 2030 12:00:00 UTC";
+		break;
+	case 53:
+		uuid = 4;
+		document.cookie = "wfsuuid=4; expires=Thu, 18 Dec 2030 12:00:00 UTC";
+		break;
+	case 54:
+		uuid = 5;
+		document.cookie = "wfsuuid=5; expires=Thu, 18 Dec 2030 12:00:00 UTC";
+		break;
+}
+}, false);
 
 function clickableGrid( rows, cols, callback ){
     var i=0;
